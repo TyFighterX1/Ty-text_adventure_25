@@ -13,6 +13,8 @@ public class InputManager : MonoBehaviour
     public Text inputText; // part of the input field where user enters response
     public Text placeHolderText; // part of the input field for initial placeholder text
 
+    public delegate void Restart();
+    public event Restart onRestart;
     
     private string story; // holds the story to display
     private List<string> commands = new List<string>();
@@ -29,14 +31,17 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
+        
         commands.Add("go");
         commands.Add("get");
+        commands.Add("restart"); //added to work with delagate example
 
         userInput.onEndEdit.AddListener(GetInput);
         story = storyText.text;
         
 
     }
+
 
     
 
@@ -65,7 +70,8 @@ public class InputManager : MonoBehaviour
                     }
                     else
                     {
-                        UpdateStory("Exit does not exist. Try again.");
+                        //added the "is locked element response""
+                        UpdateStory("Exit does not exist or is locked. Try again.");
                     }
                 }
                 else if (parts[0] == "get") // wants to switch rooms
@@ -73,11 +79,18 @@ public class InputManager : MonoBehaviour
                     if (NavigationManager.instance.TakeItem(parts[1])) //returns true if direction exists
                     {
                         GameManager.instance.inventory.Add(parts[1]);
-                        UpdateStory("You adda a(n)" + parts[1] + "to your inventory");
+                        UpdateStory("You added a(n)" + parts[1] + " to your inventory");
                     }
                     else
                     {
                         UpdateStory("Sorry, " + parts[1] + "does not exist in this room");
+                    }
+                }
+                else if (parts[0] =="restart")
+                {
+                    if (onRestart != null) //if anyone is listening
+                    {
+                        onRestart(); //invoke the event
                     }
                 }
                 //UpdateStory(msg);
