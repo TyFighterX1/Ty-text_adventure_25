@@ -9,7 +9,7 @@ public class ToggleController : MonoBehaviour
     public Image background;
     public Text displayText;
     public Text toggleText;
-
+    
     private bool darkMode;
 
     // Start is called before the first frame update

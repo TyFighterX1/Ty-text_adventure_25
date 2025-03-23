@@ -14,4 +14,5 @@ public class Exit : ScriptableObject
 
     public bool isLocked;
     public bool isHidden;
+    public bool isBlocked;
 }

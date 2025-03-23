@@ -10,6 +10,9 @@ public class NavigationManager : MonoBehaviour
     public Room currentRoom;
 
     public Exit toKeyNorth; //needed to turn exit to visable from hidden
+    public Exit toThroneEast;
+    public Exit toGoldEast;
+    public MuteController muteController;
 
     private Dictionary<string, Room> exitRooms = new Dictionary<string, Room> {};
 
@@ -36,6 +39,8 @@ public class NavigationManager : MonoBehaviour
     void ResetGame()
     {
         toKeyNorth.isHidden = true;
+        toThroneEast.isHidden = true;
+        toGoldEast.isBlocked = true;
         currentRoom = startingRoom;
         Unpack();
     }
@@ -51,8 +56,15 @@ public class NavigationManager : MonoBehaviour
                 description += " " + e.description;
                 exitRooms.Add(e.direction.ToString(), e.room);
             }
+            else if(!e.isBlocked)
+            {
+                description += " " + e.description;
+                exitRooms.Add(e.direction.ToString(), e.room);
+            }
            
         }
+
+
 
         InputManager.instance.UpdateStory(description);
     }
@@ -92,6 +104,11 @@ public class NavigationManager : MonoBehaviour
         else if (item == "orb" && currentRoom.hasOrb)
         {
             toKeyNorth.isHidden = false;
+            return true;
+        }
+        else if (item == "sword" && currentRoom.hasSword)
+        {
+            toGoldEast.isBlocked = false;
             return true;
         }
         else
