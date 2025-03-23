@@ -43,6 +43,7 @@ public class NavigationManager : MonoBehaviour
         toGoldEast.isBlocked = true;
         currentRoom = startingRoom;
         Unpack();
+        Unpack2();
     }
 
     void Unpack()
@@ -56,17 +57,23 @@ public class NavigationManager : MonoBehaviour
                 description += " " + e.description;
                 exitRooms.Add(e.direction.ToString(), e.room);
             }
-            else if(!e.isBlocked)
+           
+        }
+        InputManager.instance.UpdateStory(description);
+    }
+    void Unpack2()
+    {
+        string description = currentRoom.description;
+        exitRooms.Clear();
+        foreach (Exit e in currentRoom.exits)
+        {
+            if (!e.isBlocked)
             {
                 description += " " + e.description;
                 exitRooms.Add(e.direction.ToString(), e.room);
             }
-           
+
         }
-
-
-
-        InputManager.instance.UpdateStory(description);
     }
 
     public bool SwitchRooms(string direction)
